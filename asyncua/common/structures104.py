@@ -271,6 +271,9 @@ class DataTypeSorter:
 
 async def _recursive_parse(server, base_node, dtypes, parent_sdef=None, add_existing=False):
     for desc in await base_node.get_children_descriptions(refs=ua.ObjectIds.HasSubtype):
+        if desc.NodeId.NodeIdType == ua.NodeIdType.String:
+            # Some PLC create names not compatible with Python syntax
+            desc.NodeId.Identifier = clean_name(desc.NodeId.Identifier)
         sdef = await _read_data_type_definition(server, desc, read_existing=add_existing)
         if not sdef:
             continue
