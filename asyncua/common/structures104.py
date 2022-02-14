@@ -189,7 +189,8 @@ class {struct_name}:
         else:
             # FIXME: we are probably missing many custom tyes here based on builtin types
             # maybe we can use ua_utils.get_base_data_type()
-            raise RuntimeError(f"Unknown datatype for field: {sfield} in structure:{struct_name}, please report")
+            logger.error(f"Unknown datatype for field: {sfield} in structure:{struct_name}, please report")
+            continue
 
         if sfield.ValueRank >= 1:
             default_value = "field(default_factory=list)"

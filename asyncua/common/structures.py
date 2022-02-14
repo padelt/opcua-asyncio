@@ -279,9 +279,13 @@ def _generate_python_class(model, env=None):
         code = element.get_code()
         try:
             exec(code, env)
-        except Exception:
-            _logger.exception("Failed to execute auto-generated code from UA datatype: %s", code)
-            raise
+        except Exception as e:
+            if 'has no attribute' in str(e):
+                _logger.error("Ignoring failed execution of auto-generated code from UA datatype: %s", code)
+            else:
+
+                _logger.exception("Failed to execute auto-generated code from UA datatype: %s", code)
+                raise
     return env
 
 
